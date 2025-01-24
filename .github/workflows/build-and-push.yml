@@ -6,8 +6,9 @@ on:
       - "master"
 
 jobs:
-  docker:
+  publish-image:
     runs-on: ubuntu-latest
+    working-directory: ./container-app/sample-app/
 
     steps:
     - name: Checkout
