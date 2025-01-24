@@ -1,0 +1,26 @@
+name: Build and Push to ACR
+
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Build docker image
+      run: docker build -t python-flash-app .
+
+    - name: Tag image
+      run: docker tag python-flash-app terraformcontainer.azurecr.io/images/python-flash-app
+
+    - name: Auth to ACR
+      run: docker login terraformcontainer.azurecr.io -u {{ secrets.CONTAINER_REGISTRY_USER }} -p {{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+
+    - name: Push to ACR
+      run: docker push terraformcontainer.azurecr.io/images/python-flash-app
